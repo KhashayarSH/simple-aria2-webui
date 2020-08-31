@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+  {#<!--<form>
+    <input type="checkbox" id="id_{{i.username}}" name="users" value="{{i.id}}">
+    <label for="id_{{i.username}}">{{i.username}}</label>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>-->#}
+  {% if downloads|length > 0 %}
+  {% include '_download_table.html' %}
+  {% else %}
+  {{ 'No Downloads Here' }}
+  {% endif %}
+{% endblock %}

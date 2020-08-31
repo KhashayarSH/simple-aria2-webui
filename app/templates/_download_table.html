@@ -1,0 +1,92 @@
+{% import 'bootstrap/wtf.html' as wtf %}
+
+<div class="container">
+  <table class="table table-hover table-condensed">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-6 text-left ellipsis">
+                File Name
+              </div>
+              <div class="col-md-1 text-left ellipsis">
+                Queue
+              </div>
+              <div class="col-md-1 text-left ellipsis">
+                Size
+              </div>
+              <div class="col-md-1 text-left ellipsis">
+                Status
+              </div>
+              <div class="col-md-2 text-left ellipsis">
+                Download Rate
+              </div>
+              <div class="col-md-1 text-left ellipsis">
+                Time Left
+              </div>
+            </div>
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for download in downloads %}
+      <tr class="{% if download.status == 'complete' %} {{ 'success' }} {% elif download.status == 'error' %} {{ 'danger' }} {% elif download.status == 'active' %} {{ 'info' }} {% elif download.status == 'waiting' %} {{ 'primary' }} {% elif download.status == 'paused' %} {{ 'warning' }} {% endif %}">
+        <th scope="row">{{ loop.index }}</th>
+        <td>
+          <a class="btn btn-link" role="button" data-toggle="collapse" href="#collapseExample{{ loop.index }}" aria-expanded="false" aria-controls="collapseExample{{ loop.index }}">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-6 text-left ellipsis">
+                  {% if download.status == 'error' %}
+                  {{ download.files[0].uris[0].uri }}
+                  {% else %}
+                  {{ download.files[0].path[((download.dir|length)+1):] }}
+                  {% endif %}
+                </div>
+                <div class="col-md-1 text-left ellipsis">
+                  Queue
+                </div>
+                <div class="col-md-1 text-left ellipsis">
+                  {{ download.totalLength|size_adapter }}
+                </div>
+                <div class="col-md-1 text-left ellipsis">
+                  {{ download.status }}
+                </div>
+                <div class="col-md-2 text-left ellipsis">
+                  {% if download.status == 'active' %}
+                  {{ download.downloadSpeed|size_adapter }}/s
+                  {% endif %}
+                </div>
+                <div class="col-md-1 text-left ellipsis">
+                  {% if download.status == 'active' %}
+                  {{ [download.totalLength, download.completedLength, download.downloadSpeed]|sec_left|time_adapter }}
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </a>
+          <div class="collapse" id="collapseExample{{ loop.index }}">
+            <div class="card card-body">
+              {% if download.status != 'error' and download.status != 'removed' %}
+              <div class="progress">
+                <div class="progress-bar progress-bar-striped {% if download.status == 'complete' %} {{ 'progress-bar-success' }} {% elif download.status == 'error' %} {{ 'progress-bar-danger' }} {% elif download.status == 'active' %} {{ 'progress-bar-info active' }} {% elif download.status == 'paused' %} {{ 'progress-bar-warning' }} {% endif %}" role="progressbar" aria-valuenow="{{ [download.totalLength, download.completedLength]|percent }}" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: {{ [download.totalLength, download.completedLength]|percent }}%;">
+                  {{ [download.totalLength, download.completedLength]|percent }}%
+                </div>
+              </div>
+
+              {% endif %}
+              {% include '_download_control.html' %}
+              {% if download.status != 'error' and download.status != 'removed' and download.status != 'complete' %}
+              {% include '_change_url.html' %}
+              {% endif %}
+            </div>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

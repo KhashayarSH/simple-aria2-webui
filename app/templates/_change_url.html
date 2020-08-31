@@ -1,0 +1,18 @@
+{% import 'bootstrap/wtf.html' as wtf %}
+
+<form action="{{ url_for('change_url') }}" method="post" class="form" role="form">
+  {{ change_url_form.csrf_token }}
+  <div class="hidden">
+  {{ wtf.form_field(change_url_form.gid, value=download.gid) }}
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-11">
+        {{ wtf.form_field(change_url_form.url, class="form-control closer-top", placeholder='New URL')  }}
+      </div>
+      <div class="col-md-1">
+        <button class="btn btn-default btn-sm" {% if download.status == "complete" or download.status == "removed" %} {{ "disabled=	&#34;disabled&#34;" }} {% endif %} type="submit">Change URL</button>
+      </div>
+    </div>
+  </div>
+</form>
