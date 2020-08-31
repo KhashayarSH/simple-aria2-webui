@@ -2,14 +2,40 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-  {#<!--<form>
-    <input type="checkbox" id="id_{{i.username}}" name="users" value="{{i.id}}">
-    <label for="id_{{i.username}}">{{i.username}}</label>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>-->#}
-  {% if downloads|length > 0 %}
-  {% include '_download_table.html' %}
-  {% else %}
-  {{ 'No Downloads Here' }}
-  {% endif %}
+  <div class="container">
+    <h4>Download Filters</h4>
+    <form action="" method="POST" class="form" role="form" name="form">
+      <div class="row" id="checkbox-container">
+        <div class="col-md-2">
+          <label for="active">Active</label>
+          <input onChange="this.form.submit()" type="checkbox" id="active" value="active" name="active" checked>
+        </div>
+        <div class="col-md-2">
+          <label for="waiting">Waiting</label>
+          <input onChange="this.form.submit()" type="checkbox" id="waiting" value="waiting" name="waiting" checked>
+        </div>
+        <div class="col-lg-2">
+          <label for="complete">Complete</label>
+          <input onChange="this.form.submit()" type="checkbox" id="complete" value="complete" name="complete" hecked>
+        </div>
+        <div class="col-md-2">
+          <label for="paused">Paused</label>
+          <input onChange="this.form.submit()" type="checkbox" id="paused" value="paused" name="paused" checked>
+        </div>
+        <div class="col-md-2">
+          <label for="removed">Removed</label>
+          <input onChange="this.form.submit()" type="checkbox" id="removed" value="removed" name="removed" checked>
+        </div>
+        <div class="col-md-2">
+          <label for="error">Error</label>
+          <input onChange="this.form.submit()" type="checkbox" id="error" value="error" name="error" checked>
+        </div>
+      </form>
+    </div>
+    {% if downloads|length > 0 %}
+    {% include '_download_table.html' %}
+    {% else %}
+    {{ 'No Downloads Here' }}
+    {% endif %}
+  </div>
 {% endblock %}

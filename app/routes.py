@@ -4,18 +4,26 @@ from forms import AddDownloadForm, ChangeUrlForm, DownloadControlForm
 from app.aria2rpcfunctions import add_download_rpc, tell_active_download_rpc, tell_waiting_download_rpc, tell_stopped_download_rpc, unpause_all_download_rpc, pause_all_download_rpc, remove_download_rpc, pause_download_rpc, unpause_download_rpc, tell_status_download_rpc, change_url_download_rpc
 import json
 
+filters = ['error', 'complete', 'paused', 'waiting', 'active', 'removed']
+
 @app.route('/', methods=['GET','POST'])
 @app.route('/index', methods=['GET','POST'])
 def index():
-    if request.method == 'post':
-        request.form.getlist('status_checkbox')
-
+    if request.method == 'POST':
+        del filters[:]
+        for item in request.form:
+            filters.append(item)
     change_url_form = ChangeUrlForm()
     download_control_form = DownloadControlForm()
     downloads = tell_active_download_rpc()
     downloads += tell_waiting_download_rpc()
     downloads += tell_stopped_download_rpc()
-    #print(downloads)
+    a=[]
+    for item in downloads:
+        if item['status'] not in filters:
+            a.append(item)
+    for item in a:
+        downloads.remove(item)
     return render_template('index.html', title='Aria2 webui',
                             downloads = downloads,
                             change_url_form = change_url_form,
@@ -42,7 +50,6 @@ def download_control():
     change_url_form = ChangeUrlForm()
     download_control_form = DownloadControlForm()
     if request.method == 'POST':
-        print(request.form)
         current_download_status = tell_status_download_rpc(request.form['gid'])['status']
         if request.form['control-button'] == 'play':
             if current_download_status == 'waiting' or current_download_status == 'active':
@@ -64,6 +71,7 @@ def add_download():
     add_download_form = AddDownloadForm()
     queues = []
     if add_download_form.validate_on_submit():
+        print(request.form)
         flash('Download added')
         respose = add_download_rpc(add_download_form.url.data, 'False')
         return redirect(url_for('index'))

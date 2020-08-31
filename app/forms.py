@@ -3,6 +3,8 @@ from flask_wtf.html5 import URLField
 from wtforms import SubmitField, HiddenField
 from wtforms.validators import url, DataRequired
 
+FILTERS = ['error', 'complete', 'paused', 'waiting', 'active', 'removed']
+
 class AddDownloadForm(FlaskForm):
     url = URLField('URL', validators=[url(), DataRequired()])
     submit = SubmitField('Add Download')

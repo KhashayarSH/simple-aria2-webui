@@ -23,6 +23,28 @@
   </style>
 {% endblock %}
 
+{% block scripts %}
+  <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+  {{super()}}
+  <script>
+    var checkboxValues = JSON.parse(localStorage.getItem('checkboxValues')) || {},
+      $checkboxes = $("#checkbox-container :checkbox");
+
+    $checkboxes.on("change", function(){
+      $checkboxes.each(function(){
+        checkboxValues[this.id] = this.checked;
+    });
+
+    localStorage.setItem("checkboxValues", JSON.stringify(checkboxValues));
+    });
+
+    // On page load
+    $.each(checkboxValues, function(key, value) {
+        $("#" + key).prop('checked', value);
+        });
+
+  </script>
+{% endblock %}
 {% block title %}
    {% if title %}{{ title }} - Aria2 webui{% else %}Welcome to Aria2 webui{% endif %}
 {% endblock %}
