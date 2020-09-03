@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<div class="container">
+  <form action="{{ url_for('queues') }}" method="post" novalidate>
+    {{ add_queue_form.csrf_token }}
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h1>Add Queue</h1>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          {{ wtf.form_field(add_queue_form.name, class="form-control closer-top", placeholder='Queue Name')  }}
+        </div>
+        <div class="col-md-2">
+          <input class="form-control" type="time" id="start" name="start" value="00:00" required>
+        </div>
+        <div class="col-md-2">
+          <input class="form-control" type="time" id="finish" name="finish" value="00:00" required>
+        </div>
+        <div class="col-md-2">
+          {{ wtf.form_field(add_queue_form.submit,class="form-control")  }}
+        </div>
+      </div>
+    </div>
+  </form>
+  <table class="table table-hover table-condensed">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-6 text-left ellipsis">
+                Queue Name
+              </div>
+              <div class="col-md-2 text-left ellipsis">
+                Start Time
+              </div>
+              <div class="col-md-2 text-left ellipsis">
+                Finish Time
+              </div>
+            </div>
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for queue in queues %}
+      <tr>
+        <th scope="row">{{ loop.index }}</th>
+        <td>
+          <div class="container">
+            <div class="row">
+              <div class="col-md-10">
+                <a class="btn btn-link" role="button" data-toggle="collapse" href="#collapseQueue{{ loop.index }}" aria-expanded="false" aria-controls="collapseQueue{{ loop.index }}">
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-md-6 text-left ellipsis">
+                        {{ queue.name }}
+                      </div>
+                      <div class="col-md-2 text-left ellipsis">
+                        {{ queue.start }}
+                      </div>
+                      <div class="col-md-2 text-left ellipsis">
+                        {{ queue.finish }}
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+              <div class="col-md-2 text-left ellipsis">
+                {% include '_delete_queue.html' %}
+              </div>
+            </div>
+            <div class="collapse" id="collapseQueue{{ loop.index }}">
+              <div class="card card-body">
+                {% include '_queue_control.html' %}
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

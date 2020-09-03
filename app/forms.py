@@ -1,12 +1,10 @@
 from flask_wtf import FlaskForm
 from flask_wtf.html5 import URLField
-from wtforms import SubmitField, HiddenField
+from wtforms import SubmitField, HiddenField, StringField
 from wtforms.validators import url, DataRequired
 
-FILTERS = ['error', 'complete', 'paused', 'waiting', 'active', 'removed']
-
 class AddDownloadForm(FlaskForm):
-    url = URLField('URL', validators=[url(), DataRequired()])
+    url = URLField('', validators=[url(), DataRequired()])
     submit = SubmitField('Add Download')
 
 class ChangeUrlForm(FlaskForm):
@@ -18,3 +16,19 @@ class DownloadControlForm(FlaskForm):
     gid = HiddenField('gid')
     status = HiddenField()
     control_button = SubmitField()
+
+class AddQueueForm(FlaskForm):
+    name = StringField('', validators=[DataRequired()])
+    submit = SubmitField('Add Queue')
+
+class QueueControlForm(FlaskForm):
+    name = StringField('', validators=[DataRequired()])
+    original_name = HiddenField('')
+    submit = SubmitField('Update Queue')
+
+class DeleteQueueForm(FlaskForm):
+    name = HiddenField('')
+    Delete_button = SubmitField()
+
+class ChangeQueueForm(FlaskForm):
+    gid = HiddenField('')

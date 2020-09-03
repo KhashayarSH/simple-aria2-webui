@@ -4,7 +4,7 @@
 {% block app_content %}
   <div class="container">
     <h4>Download Filters</h4>
-    <form action="" method="POST" class="form" role="form" name="form">
+    <form action="" method="POST" class="form" role="form" id="index_form" name="index_form">
       <div class="row" id="checkbox-container">
         <div class="col-md-2">
           <label for="active">Active</label>
@@ -16,7 +16,7 @@
         </div>
         <div class="col-lg-2">
           <label for="complete">Complete</label>
-          <input onChange="this.form.submit()" type="checkbox" id="complete" value="complete" name="complete" hecked>
+          <input onChange="this.form.submit()" type="checkbox" id="complete" value="complete" name="complete" checked>
         </div>
         <div class="col-md-2">
           <label for="paused">Paused</label>
@@ -30,12 +30,23 @@
           <label for="error">Error</label>
           <input onChange="this.form.submit()" type="checkbox" id="error" value="error" name="error" checked>
         </div>
-      </form>
-    </div>
+      </div>
+      <div class="row" id="select-container">
+        <div class="col-md-12">
+          <select onChange="this.form.submit()" class="form-control" id="queue-select" name="queue-select">
+            <option type="text" id="All Downloads" value="All Downloads">All Downloads</option>
+            <option type="text" id="Main Queue" name="Main Queue" value="Main Queue">Main Queue </option>
+            {% for queue in queues %}
+            <option type="text" id="{{queue.name}}" value="{{queue.name}}">{{queue.name}}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </form>
+  </div>
     {% if downloads|length > 0 %}
     {% include '_download_table.html' %}
     {% else %}
     {{ 'No Downloads Here' }}
     {% endif %}
-  </div>
 {% endblock %}

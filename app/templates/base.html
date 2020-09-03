@@ -10,7 +10,7 @@
   }
   .closer-top {
     position: relative;
-    top: -22px;
+    top: -20px;
   }
   .closer-top-abit {
     position: relative;
@@ -19,7 +19,11 @@
   .label {
   min-width: 120px ;
   display: inline-block
-}
+  }
+  .label-fill {
+    display:inline-block;
+    width:99%;
+  }
   </style>
 {% endblock %}
 
@@ -42,7 +46,15 @@
     $.each(checkboxValues, function(key, value) {
         $("#" + key).prop('checked', value);
         });
+  </script>
+  <script>
+      $("#queue-select").on("change", function(){
+        localStorage.setItem('selectedtem', document.getElementById('queue-select').value);
+      });
 
+      $(function() {
+          document.getElementById(localStorage.getItem('selectedtem')).selected = true;
+          });
   </script>
 {% endblock %}
 {% block title %}
@@ -64,16 +76,18 @@
          <ul class="nav navbar-nav">
              <li><a href="{{ url_for('index') }}">Home</a></li>
              <li><a href="{{ url_for('add_download') }}">Add Download</a></li>
+             <li><a href="{{ url_for('downloads') }}">Downloads</a></li>
+             <li><a href="{{ url_for('queues') }}">Queues</a></li>
          </ul>
      </div>
   </nav>
 {% endblock %}
 
 {% block content %}
-  {% with messages = get_flashed_messages() %}
+  {% with messages = get_flashed_messages(with_categories = true) %}
   {% if messages %}
-      {% for message in messages %}
-      <div class="alert alert-info" role="alert">{{ message }}</div>
+      {% for category, message in messages %}
+      <div class="alert alert-{% if category == 'error' %}{{ 'danger' }}{% elif category == 'success' %}{{ 'success' }}{% else %}{{ 'info' }}{% endif %}" role="alert">{{ message }}</div>
       {% endfor %}
   {% endif %}
   {% endwith %}

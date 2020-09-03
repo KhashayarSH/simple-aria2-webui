@@ -48,7 +48,7 @@
                   {% endif %}
                 </div>
                 <div class="col-md-1 text-left ellipsis">
-                  Queue
+                  {% if downloads_queue[download.gid] %} {{ downloads_queue[download.gid] }} {% else %} {{"Main Queue"}}{% endif %}
                 </div>
                 <div class="col-md-1 text-left ellipsis">
                   {{ download.totalLength|size_adapter }}
@@ -83,6 +83,7 @@
               {% if download.status != 'error' and download.status != 'removed' and download.status != 'complete' %}
               {% include '_change_url.html' %}
               {% endif %}
+              {% include '_change_queue.html' %}
             </div>
           </div>
         </td>

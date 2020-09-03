@@ -18,7 +18,10 @@
       <div class="col-md-1 col-md-offset-1">
         <h4><span class="label label-default"><span class="glyphicon glyphicon-pawn" </span> {{ download.pieceLength|size_adapter }} </span></h4>
       </div>
-      <div class="col-md-1 col-md-offset-4">
+      <div class="col-md-3 col-md-offset-1">
+        <h4><span class="label label-default label-fill"><span class="glyphicon glyphicon-option-horizontal" </span> {% if downloads_queue[download.gid] %} {{ downloads_queue[download.gid] }} {% else %} {{"Main Queue"}}{% endif %} </span></h4>
+      </div>
+      <div class="col-md-1">
         <div class="btn-group" role="group" aria-label="...">
           <button type="submit" class="btn btn-default btn-sm" name="control-button" {% if download.status != "active" and download.status != "paused" and download.status != "waiting" %} {{ "disabled=	&#34;disabled&#34;" }} {% endif %} value="play">
             <span class="glyphicon {% if download.status != 'paused' %} {{ "glyphicon-pause" }} {% else %} {{ "glyphicon-play" }} {% endif %}"  aria-hidden="true"></span>
@@ -49,6 +52,11 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="row closer-top-abit">
+      <div class="col-md-12 ">
+        <h4><span class="label label-default label-fill"><span class="glyphicon glyphicon-folder-open" </span> {{ download.files[0].path[((download.dir|length)+1):] }}</span></h4>
       </div>
     </div>
   </div>

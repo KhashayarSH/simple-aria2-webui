@@ -1,0 +1,22 @@
+<form action="{{ url_for('queue_control') }}" method="post" class="form" role="form">
+  {{ queue_control_form.csrf_token }}
+  <div class="container">
+    <div class="hidden">
+    {{ wtf.form_field(queue_control_form.original_name, value=queue.name) }}
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        {{ wtf.form_field(queue_control_form.name, class="form-control closer-top", value=queue.name)  }}
+      </div>
+      <div class="col-md-2">
+        <input class="form-control" type="time" id="start" name="start" value="{{queue.start}}" required>
+      </div>
+      <div class="col-md-2">
+        <input class="form-control" type="time" id="finish" name="finish" value="{{queue.finish}}" required>
+      </div>
+      <div class="col-md-2">
+        {{ wtf.form_field(queue_control_form.submit,class="form-control")  }}
+      </div>
+    </div>
+  </div>
+</form>

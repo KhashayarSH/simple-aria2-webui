@@ -2,7 +2,7 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-    <form action="" method="post" novalidate>
+    <form action="{{ url_for('add_download') }}" method="post" novalidate>
       {{ add_download_form.csrf_token }}
       <div class="container">
         <div class="row">
@@ -17,8 +17,8 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-            <select class="browser-default custom-select" id="queue-field" name="queue-field">
-              <option value="main-queue"selected>Select a Queue </option>
+            <select class="form-control" id="queue-field" name="queue-field">
+              <option value="Main Queue"selected>Main Queue </option>
               {% for queue in queues %}
               <option value="{{ queue.name }}">{{ queue.name }}</option>
               {% endfor %}
@@ -27,8 +27,8 @@
         </div>
         <br>
         <div class="row">
-          <div class="col-md-12">
-              {{ wtf.form_field(add_download_form.submit)  }}
+          <div class="col-md-2">
+              {{ wtf.form_field(add_download_form.submit, class="form-control")  }}
           </div>
         </div>
       </div>

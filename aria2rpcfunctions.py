@@ -2,7 +2,7 @@ import json
 from config import TOKEN, JSONRPC_LINK, opener
 
 # adds a download with given link to given queue.
-def add_download_rpc(link, queue):
+def add_download_rpc(link):
     jsonreq = json.dumps({'jsonrpc':'2.0', 'id':'qwer', 'method':'aria2.addUri',
                          'params':['token:'+TOKEN, [link]]})
     c = opener.open(JSONRPC_LINK, jsonreq)
@@ -14,36 +14,48 @@ def remove_download_rpc(download_id):
     jsonreq = json.dumps({'jsonrpc':'2.0', 'id':'qwer', 'method':'aria2.remove',
                          'params':['token:'+TOKEN, download_id]})
     c = opener.open(JSONRPC_LINK, jsonreq)
+    data = json.load(c)['result']
+    return data
 
 # removes a download with given ID.
 def change_url_download_rpc(download_id, link):
     jsonreq = json.dumps({'jsonrpc':'2.0', 'id':'qwer', 'method':'aria2.changeUri',
                          'params':['token:'+TOKEN, download_id, 1, [], [link]]})
     c = opener.open(JSONRPC_LINK, jsonreq)
+    data = json.load(c)['result']
+    return data
 
 # pauses a download with given ID.
 def pause_download_rpc(download_id):
     jsonreq = json.dumps({'jsonrpc':'2.0', 'id':'qwer', 'method':'aria2.pause',
                          'params':['token:'+TOKEN, download_id]})
     c = opener.open(JSONRPC_LINK, jsonreq)
+    data = json.load(c)['result']
+    return data
 
 # pauses all downloads.
 def pause_all_download_rpc():
     jsonreq = json.dumps({'jsonrpc':'2.0', 'id':'qwer', 'method':'aria2.pauseAll',
                          'params':['token:'+TOKEN]})
     c = opener.open(JSONRPC_LINK, jsonreq)
+    data = json.load(c)['result']
+    return data
 
 # unpauses(moves to waiting queue) a download with given ID.
 def unpause_download_rpc(download_id):
     jsonreq = json.dumps({'jsonrpc':'2.0', 'id':'qwer', 'method':'aria2.unpause',
                          'params':['token:'+TOKEN, download_id]})
     c = opener.open(JSONRPC_LINK, jsonreq)
+    data = json.load(c)['result']
+    return data
 
 # unpauses (moves to waiting queue) all downloads.
 def unpause_all_download_rpc():
     jsonreq = json.dumps({'jsonrpc':'2.0', 'id':'qwer', 'method':'aria2.unpauseAll',
                          'params':['token:'+TOKEN]})
     c = opener.open(JSONRPC_LINK, jsonreq)
+    data = json.load(c)['result']
+    return data
 
 # returns a json object containing the given params.
 # files is a json object itself.

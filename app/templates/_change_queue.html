@@ -1,0 +1,21 @@
+<form action="{{ url_for('change_queue') }}" method="post" class="form" role="form">
+  {{ change_queue_form.csrf_token }}
+  <div class="hidden">
+  {{ wtf.form_field(change_queue_form.gid, value=download.gid) }}
+  </div>
+  <div class="container">
+    <div class="row closer-top" id="select-container">
+      <div class="col-md-10">
+        <select class="form-control" id="change_queue" name="change_queue" value="{% if downloads_queue[download.gid] %} {{ downloads_queue[download.gid] }} {% else %} {{"Main Queue"}}{% endif %}">
+          <option type="text" id="Main Queue" value="Main Queue">Main Queue </option>
+          {% for queue in queues %}
+          <option type="text" id="{{queue.name}}" value="{{queue.name}}">{{queue.name}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-default btn-sm form-control" type="submit">Change Queue</button>
+      </div>
+    </div>
+  </div>
+</form>
