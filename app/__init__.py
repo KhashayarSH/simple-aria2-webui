@@ -10,6 +10,7 @@ app.config.from_object(Config)
 
 queue_handler = QueueHandler()
 
+# Using APScheduler to intervally check for queues to start or stop
 scheduler = APScheduler()
 scheduler.init_app(app)
 scheduler.start()

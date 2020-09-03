@@ -2,6 +2,10 @@ from aria2rpcfunctions import add_download_rpc, tell_active_download_rpc, tell_w
 from app import queue_handler
 import datetime
 
+# These functions are used as a facade for Download Manager functionalities merging Queues and aria2rpcfunctions
+
+
+# Returns a list of tellStatus rpc request results for given filters and queue
 def get_downloads_dm(filters, displayed_queue):
     downloads = []
     downloads = tell_active_download_rpc()
@@ -20,46 +24,65 @@ def get_downloads_dm(filters, displayed_queue):
         downloads.remove(item)
     return downloads
 
+# returns tellStatus for given gid
 def get_status_dm(gid):
     return tell_status_download_rpc(gid)
 
+# adds a download with the given link and queue
 def add_download_dm(link, queue):
     gid = add_download_rpc(link)
     if queue != "Main Queue":
         queue_handler.change_download_queue(gid, queue)
 
+# adds the given link to download with gived gid's uri list
 def change_download_link_dm(gid, link):
     return change_url_download_rpc(gid, link)
 
+# pauses download with given gid
 def pause_download_dm(gid):
-    return pause_download_rpc(gid)
+    current_status = get_status_dm(item)['status']
+    if current_status == 'active' or current_status == 'waiting':
+        return pause_download_rpc(gid)
 
+# unpauses download with given gid
 def unpause_download_dm(gid):
-    return unpause_download_rpc(gid)
+    current_status = get_status_dm(item)['status']
+    if current_status == 'paused':
+        return unpause_download_rpc(gid)
 
+# removes download with given gid
 def remove_download_dm(gid):
-    return remove_download_rpc(gid)
+    current_status = get_status_dm(item)['status']
+    if current_status == 'paused' or current_status == 'waiting' or current_status == 'active':
+        return remove_download_rpc(gid)
 
+# returns  a list of queues
 def get_queues_dm():
     return queue_handler.get_queues()
 
+# returns a dictionary key:gid, value:queue.name
 def get_downloads_queue_dm():
     return queue_handler.get_downloads_queue()
 
+# changes queue of a given download
 def change_download_queue_dm(gid, queue):
     if queue == "Main Queue":
         queue = ''
     queue_handler.change_download_queue(gid, queue)
 
+# adds a queue with given values to queues
 def add_queue_dm(name, start, finish):
     queue_handler.add_queue(name, start, finish)
 
+# delets a queue with given name
 def delete_queue_dm(queue):
     queue_handler.delete_queue(queue)
 
+# updates a queue with new values
 def update_queue_dm(original_name, name, start, finish):
     queue_handler.update_queue(original_name, name, start, finish)
 
+# unpauses all paused downloads in given queue
 def start_queue_dm(queue):
     downloads_queue = get_downloads_queue_dm()
     for item in downloads_queue:
@@ -67,6 +90,7 @@ def start_queue_dm(queue):
             if get_status_dm(item)['status'] == 'paused':
                 unpause_download_dm(item)
 
+# pauses all active/waiting downloads in given queue
 def stop_queue_dm(queue):
     downloads_queue = get_downloads_queue_dm()
     for item in downloads_queue:
@@ -75,6 +99,7 @@ def stop_queue_dm(queue):
             if current_status == 'active' or current_status == 'waiting':
                 pause_download_dm(item)
 
+# checks all queues and starts or stops queues as needed 
 def queue_player():
     current_time = datetime.datetime.now()
     current_time = current_time.hour*60+current_time.minute

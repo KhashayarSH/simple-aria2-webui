@@ -5,14 +5,17 @@ from download_manager_functions import get_downloads_dm, get_queues_dm, get_down
 from config import BASE_DIR
 import json, os, time
 
+# initial values for filters and selected queue for display
 filters = ['error', 'complete', 'paused', 'waiting', 'active', 'removed']
 displayed_queue = 'All Downloads'
 
+# displays downloads table and forms to interact with downloads
 @app.route('/', methods=['GET','POST'])
 @app.route('/index', methods=['GET','POST'])
 def index():
     queues = get_queues_dm()
     downloads_queue = get_downloads_queue_dm()
+    # updates values of filters and selected queue for display
     if request.method == 'POST':
         global displayed_queue
         displayed_queue = request.form['queue-select']
@@ -29,6 +32,7 @@ def index():
                             change_url_form = change_url_form,
                             download_control_form = download_control_form, queues=queues, downloads_queue=downloads_queue, change_queue_form=change_queue_form)
 
+# refrenced by change_url_form of index
 @app.route('/index/change_url', methods=['GET','POST'])
 def change_url():
     change_url_form = ChangeUrlForm()
@@ -37,6 +41,7 @@ def change_url():
         change_download_link_dm(change_url_form.gid.data, change_url_form.url.data)
     return redirect(url_for('index'))
 
+# refrenced by download_control_form of index
 @app.route('/index/download_control', methods=['GET','POST'])
 def download_control():
     if request.method == 'POST':
@@ -50,6 +55,7 @@ def download_control():
             remove_download_dm(request.form['gid'])
     return redirect(url_for('index'))
 
+# displays add_download_form
 @app.route('/add_download', methods=['GET','POST'])
 def add_download():
     queues = get_queues_dm()
@@ -60,6 +66,7 @@ def add_download():
         return redirect(url_for('add_download'))
     return render_template('add_download.html', title='Add Download', add_download_form=add_download_form, queues = queues)
 
+# displays queues table and a form to create queues
 @app.route('/queues', methods=['GET','POST'])
 def queues():
     queues = get_queues_dm()
@@ -85,6 +92,7 @@ def queues():
     queues = get_queues_dm()
     return render_template('queues.html', title='Queues', add_queue_form = add_queue_form, queue_control_form = queue_control_form, queues = queues, delete_queue_form = delete_queue_form)
 
+# refrenced by queue_control_form of queues
 @app.route('/queues/queue_control', methods=['GET','POST'])
 def queue_control():
     queue_control_form = QueueControlForm()
@@ -106,18 +114,21 @@ def queue_control():
             flash('Queue name is duplicate', 'error')
     return redirect(url_for('queues'))
 
+# refrenced by delete_queue_form of queues
 @app.route('/queues/delete_queue', methods=['GET','POST'])
 def delete_queue():
     if request.method == 'POST':
         delete_queue_dm(request.form['name'])
     return redirect(url_for('queues'))
 
+# refrenced by change_queue_form
 @app.route('/index/change_queue', methods=['GET','POST'])
 def change_queue():
     if request.method == 'POST':
         change_download_queue_dm(request.form['gid'], request.form['change_queue'])
     return redirect(url_for('index'))
 
+# displays a table for files in the gien BASE_DIR (Aria2 download path)
 @app.route('/downloads', defaults={'req_path': ''})
 @app.route('/downloads/<req_path>')
 def downloads(req_path):
