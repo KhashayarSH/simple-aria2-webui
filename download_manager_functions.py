@@ -40,21 +40,29 @@ def change_download_link_dm(gid, link):
 
 # pauses download with given gid
 def pause_download_dm(gid):
-    current_status = get_status_dm(item)['status']
+    current_status = get_status_dm(gid)['status']
     if current_status == 'active' or current_status == 'waiting':
         return pause_download_rpc(gid)
 
 # unpauses download with given gid
 def unpause_download_dm(gid):
-    current_status = get_status_dm(item)['status']
+    current_status = get_status_dm(gid)['status']
     if current_status == 'paused':
         return unpause_download_rpc(gid)
 
 # removes download with given gid
 def remove_download_dm(gid):
-    current_status = get_status_dm(item)['status']
+    current_status = get_status_dm(gid)['status']
     if current_status == 'paused' or current_status == 'waiting' or current_status == 'active':
         return remove_download_rpc(gid)
+
+# pauses all downloads
+def pause_all_download_dm():
+    pause_all_download_rpc();
+
+# unpauses all downloads
+def unpause_all_download_dm():
+    unpause_all_download_rpc();
 
 # returns  a list of queues
 def get_queues_dm():
@@ -99,7 +107,7 @@ def stop_queue_dm(queue):
             if current_status == 'active' or current_status == 'waiting':
                 pause_download_dm(item)
 
-# checks all queues and starts or stops queues as needed 
+# checks all queues and starts or stops queues as needed
 def queue_player():
     current_time = datetime.datetime.now()
     current_time = current_time.hour*60+current_time.minute
