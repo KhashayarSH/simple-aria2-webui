@@ -29,13 +29,13 @@ A simple WebUI for Aria2 Download Utility with an implemented Download Queue fea
 # Installation
 ## Install Aria2
 You need to setup your Aria2 first install it with:
-'''bash
+```bash
 sudo apt install aria2
-'''
+```
 ## Aria2 configuration
 Create a new configuration file *aria2.conf* with following content:
 
-'''
+```
 ##files
 dir=/path/to/downloads
 file-allocation=falloc
@@ -83,21 +83,21 @@ enable-dht=true
 timeout=600
 retry-wait=30
 max-tries=50
-'''
+```
 
 Now set the new *aria2.conf* as the new configuration with following command:
-'''bash
+```bash
 sudo aria2c --conf-path="/path/to/aria2.conf"
-'''
+```
 
 ## Add Aria2 as a systemd service
 Add Aria2 as a systemd service by pasting following content in *aria2.service*:
 
-'''bash
+```bash
 sudo nano /lib/systemd/system/service/aria2.service
-'''
+```
 
-'''
+```
 [Unit]
 Description=Aria2c download manager
 Requires=network.target
@@ -115,19 +115,19 @@ Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
-'''
+```
 
 Restart and now you can start Aria2 service with:
-'''bash
+```bash
 sudo service aria2 start
-'''
+```
 You can check status with:
-'''bash
+```bash
 sudo service aria2 status
-'''
+```
 ## Set config.py
 Replace *'your_secret_key'*, *'aria2_token'* and *'/path/to/downloads'* with appropriate values.
-'''python
+```python
 import os
 import urllib2
 
@@ -145,12 +145,12 @@ BASE_DIR = '/path/to/downloads'
 # Opener used for rpc comunication
 opener = urllib2.build_opener()
 opener.addheaders = [('User-Agent', 'Mozilla/5.0')]
-'''
+```
 ## Run Flask
 In project directory run flask with following commands:
-'''bash
+```bash
 export FLASK_APP=aria2\ webui.py
 flask run
-'''
+```
 # License
 [link](https://raw.githubusercontent.com/KhashayarSH/simple-aria2-webui/master/LICENSE)
