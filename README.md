@@ -23,7 +23,7 @@ A simple WebUI for Aria2 Download Utility with an implemented Download Queue fea
 ![Image](https://raw.githubusercontent.com/KhashayarSH/simple-aria2-webui/master/screenshots/queues.png)
 
 # Prerequisites
-* Aria2 Download Utility [Link](https://aria2.github.io/)
+* [Aria2 Download Utility](https://aria2.github.io/)
 * Python 2 and used packages
 
 # Installation
@@ -33,7 +33,7 @@ You need to setup your Aria2 first install it with:
 sudo apt install aria2
 ```
 ## Aria2 configuration
-Create a new configuration file *aria2.conf* with following content:
+First create *aria2.session*, *aria2.log* files and then create a new configuration file *aria2.conf* with following content:
 
 ```
 ##files
@@ -94,7 +94,7 @@ sudo aria2c --conf-path="/path/to/aria2.conf"
 Add Aria2 as a systemd service by pasting following content in *aria2.service*:
 
 ```bash
-sudo nano /lib/systemd/system/service/aria2.service
+sudo nano /lib/systemd/system/aria2.service
 ```
 
 ```
@@ -153,4 +153,4 @@ export FLASK_APP=aria2\ webui.py
 flask run
 ```
 # License
-[link](https://raw.githubusercontent.com/KhashayarSH/simple-aria2-webui/master/LICENSE)
+[MIT](https://raw.githubusercontent.com/KhashayarSH/simple-aria2-webui/master/LICENSE)
